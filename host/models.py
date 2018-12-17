@@ -96,6 +96,7 @@ class VirtualHost(models.Model):
     datacenter = models.ForeignKey(to=DataCenter, on_delete=models.CASCADE)
     hardwareinfo = models.ForeignKey(to=HardwareInfo, on_delete=models.CASCADE)
     sn = models.CharField(max_length=256, null=False)
+    physicalhost = models.ForeignKey(to=PhysicalHost, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

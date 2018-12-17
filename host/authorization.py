@@ -8,13 +8,11 @@ from datacenter.models import DataCenter
 class HostTokenAuthorization(BaseAuthentication):
     def authenticate(self, request):
         # 获取post或者put中的token
-        try:
-            token = request.data['token']
-        except KeyError:
-            token = ""
-        # 根据token查找user并返回一个tuple
-        # 注意是tuple!
-        return self.get_datacenter(token), None
+        token = request.query_params.get('token', None)
+        if token is not None:
+            # 根据token查找user并返回一个tuple
+            # 注意是tuple!
+            return self.get_datacenter(token), None
 
     def get_datacenter(self, token):
         try:

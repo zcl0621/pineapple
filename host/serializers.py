@@ -1,7 +1,7 @@
-from rest_framework import serializers
-from host.models import PhysicalHost, HardwareInfo, VirtualHost
-from datacenter.serializers import DateCanterSerializers
 from drf_writable_nested import WritableNestedModelSerializer
+from rest_framework import serializers
+
+from host.models import PhysicalHost, HardwareInfo, VirtualHost
 
 
 # Create your serializers here.
@@ -30,5 +30,5 @@ class VirtualHostSerializers(WritableNestedModelSerializer):
         model = VirtualHost
         fields = (
             'id', 'hostname', 'sn', 'datacenter', 'hardwareinfo', 'created',
-            'updated')
+            'updated', 'physicalhost')
         read_only_fields = ('created', 'updated')

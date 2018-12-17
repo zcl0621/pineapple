@@ -8,7 +8,7 @@ from datacenter.serializers import DateCanterSerializers
 
 
 class DataCenterViewSet(viewsets.ModelViewSet):
-    queryset = DataCenter.objects.all()
+    queryset = DataCenter.objects.all().order_by('-id')
     serializer_class = DateCanterSerializers
     permission_classes = (permissions.IsAuthenticated,)
 

@@ -5,6 +5,6 @@ from datacenter.models import DataCenter
 
 class HostTokenPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
-        token = request.data['token']
-        if DataCenter.objects.get(token=token):
+        token = request.query_params.get('token', None)
+        if token is not None and DataCenter.objects.get(token=token):
             return True
