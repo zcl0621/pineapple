@@ -13,6 +13,7 @@ class DataCenter(models.Model):
     other_info 数据中心其他信息
     toekn 主机信息 api token值
     """
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=256, null=False)
     site = models.CharField(max_length=256, null=False)
     contact = models.CharField(max_length=256, null=False)

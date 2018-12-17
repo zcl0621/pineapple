@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'datacenter.apps.DatacenterConfig',
     'host.apps.HostConfig',
+    'public.apps.PublicConfig',
     'rest_framework',
 ]
 REST_FRAMEWORK = {

@@ -1,22 +1,34 @@
 from rest_framework import serializers
-from host.models import PhysicalHost, HostTag
+from host.models import PhysicalHost, HardwareInfo, VirtualHost
+from datacenter.serializers import DateCanterSerializers
+from drf_writable_nested import WritableNestedModelSerializer
 
 
 # Create your serializers here.
+class HardwareInfoSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = HardwareInfo
+        fields = ('id', 'ip', 'dns', 'cpu', 'memory', 'disk', 'gpu', 'updated', 'created')
+        read_only_fields = ('updated', 'created')
 
 
-class PhysicalHostSerializers(serializers.ModelSerializer):
+class PhysicalHostSerializers(WritableNestedModelSerializer):
+    hardwareinfo = HardwareInfoSerializers(many=False)
+
     class Meta:
         model = PhysicalHost
         fields = (
-            'id', 'hostname', 'ip', 'cpu', 'memory', 'motherboard', 'disk', 'gpu', 'dns', 'virtual_host',
-            'physical_host',
-            'service', 'machine_room', 'cabinet', 'datacenter', 'created', 'updated')
+            'id', 'hostname', 'service', 'machine_room', 'cabinet', 'sn', 'datacenter', 'hardwareinfo', 'created',
+            'updated')
         read_only_fields = ('created', 'updated')
 
 
-class HostTagSerializers(serializers.ModelSerializer):
+class VirtualHostSerializers(WritableNestedModelSerializer):
+    hardwareinfo = HardwareInfoSerializers(many=False)
+
     class Meta:
-        model = HostTag
-        fields = ('id', 'name', 'color', 'host_list', 'datacenter', 'created', 'updated')
+        model = VirtualHost
+        fields = (
+            'id', 'hostname', 'sn', 'datacenter', 'hardwareinfo', 'created',
+            'updated')
         read_only_fields = ('created', 'updated')

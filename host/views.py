@@ -1,28 +1,26 @@
 from rest_framework import viewsets, permissions
 
-from host.models import Host, HostTag
-from host.serializers import HostSerializers, HostTagSerializers
+from host.models import PhysicalHost, VirtualHost, HardwareInfo
+from host.serializers import PhysicalHostSerializers, VirtualHostSerializers, HardwareInfoSerializers
 from host.permissions import HostTokenPermission
 
 
 # Create your views here.
 
 
-class HostViewSet(viewsets.ModelViewSet):
-    queryset = Host.objects.all()
-    serializer_class = HostSerializers
-    permission_classes = (HostTokenPermission, permissions.IsAuthenticated,)
-
-    def create(self, request, *args, **kwargs):
-        try:
-            token = request.data['token']
-        except KeyError:
-            pass
+class PhysicalHostViewSet(viewsets.ModelViewSet):
+    queryset = PhysicalHost.objects.all()
+    serializer_class = PhysicalHostSerializers
+    permission_classes = (permissions.IsAuthenticated,)
 
 
+class VirtualHostViewSet(viewsets.ModelViewSet):
+    queryset = VirtualHost.objects.all()
+    serializer_class = VirtualHostSerializers
+    permission_classes = (permissions.IsAuthenticated,)
 
 
-class HostTagViewSet(viewsets.ModelViewSet):
-    queryset = HostTag.objects.all()
-    serializer_class = HostTagSerializers
+class HardwareInfoViewSet(viewsets.ModelViewSet):
+    queryset = HardwareInfo.objects.all()
+    serializer_class = HardwareInfoSerializers
     permission_classes = (permissions.IsAuthenticated,)

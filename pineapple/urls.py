@@ -22,8 +22,8 @@ from host import views as host_views
 
 router = DefaultRouter()
 router.register(r'datacenter', datacenter_views.DataCenterViewSet)
-router.register(r'host', host_views.HostViewSet)
-router.register(r'hosttag', host_views.HostTagViewSet)
+router.register(r'physicalhost', host_views.PhysicalHostViewSet)
+router.register(r'virtualhost', host_views.VirtualHostViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api/', include('rest_framework.urls', namespace='rest_framework'))
