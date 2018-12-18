@@ -81,6 +81,12 @@ class PhysicalHost(models.Model):
 
     class Meta:
         db_table = 'physicalhost'
+        permissions = (
+            ("修改物理主机", "Can modify all physicalhost"),
+            ("删除物理主机", "Can add all physicalhost"),
+            ("修改指定数据中心下的物理主机", "Can modify all physicalhost by the datacenter"),
+            ("删除指定数据中心下的物理主机", "Can modify all physicalhost by the datacenter"),
+        )
 
     def __str__(self):
         return self.hostname

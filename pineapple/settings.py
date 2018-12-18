@@ -44,9 +44,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100,
     'DEFAULT_PERMISSION_CLASSES': (
-        'host.permissions.HostTokenPermission',
         'rest_framework.permissions.IsAuthenticated',
-
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'host.authorization.HostTokenAuthorization',

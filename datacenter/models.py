@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import Group
 
 
 # Create your models here.
@@ -21,6 +22,7 @@ class DataCenter(models.Model):
     email = models.EmailField(null=False)
     other_info = models.TextField(null=True)
     token = models.TextField(null=False)
+    group = models.ManyToManyField(to=Group)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
