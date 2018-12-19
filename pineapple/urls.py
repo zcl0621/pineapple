@@ -20,6 +20,7 @@ from rest_framework.routers import DefaultRouter
 from datacenter import views as datacenter_views
 from host import views as host_views
 from public import views as public_views
+from rest_framework_jwt.views import obtain_jwt_token
 
 router = DefaultRouter()
 router.register(r'datacenter', datacenter_views.DataCenterViewSet)
@@ -29,6 +30,6 @@ router.register(r'public/group', public_views.GroupViewset)
 router.register(r'public/permission', public_views.PermissionViewset)
 router.register(r'public/user', public_views.UserViewset)
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^api/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api/', include(router.urls)),
+    url(r'^auth/', obtain_jwt_token),
 ]
