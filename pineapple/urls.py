@@ -16,20 +16,22 @@ Including another URLconf
 from django.conf.urls import url
 from django.urls import include
 from rest_framework.routers import DefaultRouter
+from rest_framework_jwt.views import obtain_jwt_token
 
 from datacenter import views as datacenter_views
 from host import views as host_views
 from public import views as public_views
-from rest_framework_jwt.views import obtain_jwt_token
 
 router = DefaultRouter()
 router.register(r'datacenter', datacenter_views.DataCenterViewSet)
 router.register(r'physicalhost', host_views.PhysicalHostViewSet)
 router.register(r'virtualhost', host_views.VirtualHostViewSet)
-router.register(r'public/group', public_views.GroupViewset)
-router.register(r'public/permission', public_views.PermissionViewset)
-router.register(r'public/user', public_views.UserViewset)
+router.register(r'group', public_views.GroupViewset)
+router.register(r'permission', public_views.PermissionViewset)
+router.register(r'user', public_views.UserViewset)
 urlpatterns = [
     url(r'^api/', include(router.urls)),
-    url(r'^auth/', obtain_jwt_token),
+    url(r'^api/login/', obtain_jwt_token),
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework')),
 ]

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
 
 from host.models import PhysicalHost, VirtualHost
 from host.serializers import PhysicalHostSerializers, VirtualHostSerializers
@@ -14,27 +15,18 @@ class PhysicalHostViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = PhysicalHost.objects.all()
-        token = self.request.query_params.get('token', None)
-        sn = self.request.query_params.get('sn', None)
-        user = User.objects.get(id=self.request.user.id)
-        if user and token is None and sn is None:
-            # 当是页面访问时 没有token和sn
-            if user.is_staff:
+        try:
+            if self.request.user.is_staff:
                 return queryset
             else:
-                queryset = queryset.filter(datacenter__group__in=user.groups.all())
-                return queryset
-        elif user and token and sn:
-            queryset = queryset.filter(datacenter__token=token, sn=sn)
-            return queryset
-        elif user and token is None and sn:
-            queryset = queryset.filter(sn=sn)
-            return queryset
-        elif user and token and sn is None:
-            queryset = queryset.filter(datacenter__token=token)
-            return queryset
-        else:
-            return None
+                user = User.objects.get(id=self.request.user)
+                return queryset.filter(datacenter__group__in=user.groups.all())
+        except TypeError:
+            token = self.request.query_params('token', None)
+            sn = self.request.query_params('sn', None)
+            return queryset.filter(datacenter__token=token, sn=sn)
+        except Exception as e:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class VirtualHostViewSet(viewsets.ModelViewSet):

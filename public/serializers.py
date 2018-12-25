@@ -22,10 +22,22 @@ class GroupSerializers(serializers.HyperlinkedModelSerializer):
 class PermissionSerializers(serializers.ModelSerializer):
     class Meta:
         model = Permission
-        fields = ('id', 'name', 'content_type', 'codename', 'objects')
+        fields = ('id', 'codename')
 
 
-class UserSerializers(serializers.ModelSerializer):
+class UserSerializers(serializers.HyperlinkedModelSerializer):
+    roles = serializers.SerializerMethodField()
+
+    def get_roles(self, obj):
+        if obj.is_staff:
+            return ['admin']
+        roles_list = set()
+        for group in obj.groups.all():
+            for permissions in group.permissions.values_list('codename'):
+                for permission in permissions:
+                    roles_list.add(permission)
+        return roles_list
+
     def create(self, validated_data):
         user = User(username=validated_data['username'])
         user.set_password(validated_data['password'])
@@ -47,6 +59,7 @@ class UserSerializers(serializers.ModelSerializer):
         instance.email = validated_data['email']
         instance.is_staff = validated_data['is_staff']
         instance.is_active = validated_data['is_active']
+        instance.set_password(validated_data['password'])
         instance.save()
         instance.groups.clear()
         for group in validated_data['groups']:
@@ -56,4 +69,6 @@ class UserSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups', 'password')
+        fields = (
+            'id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups', 'password',
+            'roles')
